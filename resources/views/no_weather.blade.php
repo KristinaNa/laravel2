@@ -33,18 +33,11 @@
         </style>
     </head>
     <body>
-    dddmbmkj
         <div class="container">
             <div class="content">
-                <div class="title">Sorry, no weather here :(
-                    <img src="C:\wamp\www\laravel\public\refresh.jpeg">
-                    <input type="image" src="C:\wamp\www\laravel\public\refresh.jpeg" alt="Submit">
-                    <img src="file:///C:/wamp/www/laravel/public/refresh.jpeg" alt="альтернативный текст">
-
-                </div>
-
+                <div class="title">Sorry, no weather here :(</div>
             </div>
-            <br/><a href="{{$town}}/refresh">refresh</a><br/>
+            <p><a href="{{$town}}/refresh"><img src="{{asset('refresh.jpeg')}}" width="30"  height="30"></a></p>
         </div>
     </body>
 </html>

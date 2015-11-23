@@ -47,7 +47,9 @@ class WeatherController extends Controller {
             $temp_max=$response['list'][$i]['main']['temp_max'];
             $temp_min = round($temp_min - 273.15);
             $temp_max = round($temp_max - 273.15);
-            $icon = $response['list'][$i]['weather'][0]['icon'];
+            $weather_icon = $response['list'][$i]['weather'][0]['icon'];
+            $wind_icon = $response['list'][$i]['wind']['deg'];
+
 
 
             $weather = new Weather;
@@ -55,7 +57,8 @@ class WeatherController extends Controller {
             $weather->temp_min = $temp_min;
             $weather->temp_max = $temp_max;
             $weather->kuupaev = $date;
-            $weather->icon = $icon;
+            $weather->weather_icon = $weather_icon;
+            $weather->wind_icon = $wind_icon;
             $weather->save();
 
         }
@@ -108,14 +111,16 @@ class WeatherController extends Controller {
             $temp_max=$response['list'][$i]['main']['temp_max'];
             $temp_min = round($temp_min - 273.15);
             $temp_max = round($temp_max - 273.15);
-            $icon = $response['list'][$i]['weather'][0]['icon'];
+            $weather_icon = $response['list'][$i]['weather'][0]['icon'];
+            $wind_icon=$response['list'][$i]['wind']['deg'];
 
             $weather = new Weather;
             $weather->town_id = $id;
             $weather->temp_min = $temp_min;
             $weather->temp_max = $temp_max;
             $weather->kuupaev = $date;
-            $weather->icon = $icon;
+            $weather->weather_icon = $weather_icon;
+            $weather->wind_icon = $wind_icon;
             $weather->save();
 
         }

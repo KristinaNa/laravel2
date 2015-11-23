@@ -16,7 +16,10 @@
                 $town = $array['town'];
                 echo "<tr><td><a href='/weather/$town'</a>".$town."</td></tr>";
             }
+
             ?>
+
+
         </table>
     </body>
 </html>
