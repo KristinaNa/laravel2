@@ -10,6 +10,9 @@
             #text{
                 margin-left: 3%;
             }
+            td{
+                text-align: center;
+            }
         </style>
     </head>
     <body>
@@ -24,7 +27,7 @@
                     <div class="col-md-2">
                         <table class="table table-bordered">
                             <tr>
-                                <td colspan="9">{{date("d. F",strtotime($array[0]['kuupaev']))}}</td>
+                                <td colspan="11">{{date("d. F",strtotime($array[0]['kuupaev']))}}</td>
                             </tr>
                             <tr>
                                 <tr>
@@ -54,7 +57,6 @@
                                         @elseif(236.25 > $avalue['wind_icon'] && $avalue['wind_icon'] > 213.75) &#8601;
                                         @elseif(326.25 > $avalue['wind_icon'] && $avalue['wind_icon'] > 303.75) &#8598;
                                         @endif
-
                                     </td>
                                 </tr>
                             @endforeach
@@ -63,7 +65,6 @@
                 @endforeach
             </div>
         </div>
-
     </body>
 </html>
 

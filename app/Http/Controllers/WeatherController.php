@@ -19,7 +19,10 @@ use Carbon\Carbon;
 
 class WeatherController extends Controller {
     public function index(){
-        return view('main');
+       // return view('main');
+        $towns = DB::table('towns')->get();
+        return View::make('/', array('towns' => $towns));
+
     }
 
     public function store(Request $request){
@@ -126,4 +129,5 @@ class WeatherController extends Controller {
         }
         return redirect('weather/'.$town);
     }
+
 }
