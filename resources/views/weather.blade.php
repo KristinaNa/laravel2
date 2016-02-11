@@ -18,6 +18,7 @@
     <body>
         <div id="text">
             <h2>Hello, {{ $town }}.
+                <a href="/"><img src="{{asset('back.png')}}" width="30"  height="30"></a>
                 <a href="{{$town}}/refresh"><img src="{{asset('refresh.jpeg')}}" width="30"  height="30"></a>
             </h2>
         </div>
