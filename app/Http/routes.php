@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 
 Route::get('weather/{town}/refresh', 'WeatherController@refresh');
+Route::get('weather/refresh_db', 'WeatherController@refresh_db');
 Route::get('/', function()
 {
     return view('main');

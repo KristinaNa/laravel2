@@ -22,6 +22,30 @@ class WeatherController extends Controller {
         return view('main');
 
     }
+    private function update_weather($list, $town_id){
+        for($i = 0; $i < sizeof($list); $i++){
+            $date=date("Y-m-d H:i:s",$list[$i]['dt']);
+            $temp_min=$list[$i]['main']['temp_min'];
+            $temp_max=$list[$i]['main']['temp_max'];
+            $temp_min = round($temp_min - 273.15);
+            $temp_max = round($temp_max - 273.15);
+            $weather_icon = $list[$i]['weather'][0]['icon'];
+            $wind_icon=$list[$i]['wind']['deg'];
+
+            $weather = new Weather;
+            $weather->town_id = $town_id;
+            $weather->temp_min = $temp_min;
+            $weather->temp_max = $temp_max;
+            $weather->kuupaev = $date;
+            $weather->weather_icon = $weather_icon;
+            $weather->wind_icon = $wind_icon;
+            $weather->save();
+
+        }
+
+
+
+    }
 
     public function store(Request $request){
         $city = $request->input('town');
@@ -42,27 +66,8 @@ class WeatherController extends Controller {
         $town->town = $name;
         $town->id = $id;
         $town->save();
-        for($i = 0; $i < sizeof($response['list']); $i++){
-            $date=date("Y-m-d H:i:s",$response['list'][$i]['dt']);
-            $temp_min=$response['list'][$i]['main']['temp_min'];
-            $temp_max=$response['list'][$i]['main']['temp_max'];
-            $temp_min = round($temp_min - 273.15);
-            $temp_max = round($temp_max - 273.15);
-            $weather_icon = $response['list'][$i]['weather'][0]['icon'];
-            $wind_icon = $response['list'][$i]['wind']['deg'];
 
-
-
-            $weather = new Weather;
-            $weather->town_id = $id;
-            $weather->temp_min = $temp_min;
-            $weather->temp_max = $temp_max;
-            $weather->kuupaev = $date;
-            $weather->weather_icon = $weather_icon;
-            $weather->wind_icon = $wind_icon;
-            $weather->save();
-
-        }
+        $this->update_weather($response['list'],$id);
 
         return redirect()->action('WeatherController@index');
     }
@@ -103,29 +108,21 @@ class WeatherController extends Controller {
        //  print_r($response);
         $id = $response['city']['id'];
         $date_today = (date("Y-m-d", strtotime("+0 day")));
-
         DB::table('weather')->where('kuupaev', '>=', $date_today)->where('town_id', $town_id)->delete();
-
-        for($i = 0; $i < sizeof($response['list']); $i++){
-            $date=date("Y-m-d H:i:s",$response['list'][$i]['dt']);
-            $temp_min=$response['list'][$i]['main']['temp_min'];
-            $temp_max=$response['list'][$i]['main']['temp_max'];
-            $temp_min = round($temp_min - 273.15);
-            $temp_max = round($temp_max - 273.15);
-            $weather_icon = $response['list'][$i]['weather'][0]['icon'];
-            $wind_icon=$response['list'][$i]['wind']['deg'];
-
-            $weather = new Weather;
-            $weather->town_id = $id;
-            $weather->temp_min = $temp_min;
-            $weather->temp_max = $temp_max;
-            $weather->kuupaev = $date;
-            $weather->weather_icon = $weather_icon;
-            $weather->wind_icon = $wind_icon;
-            $weather->save();
-
-        }
+        $this->update_weather($response['list'],$town_id);
         return redirect('weather/'.$town);
     }
+    public function refresh_db(){
+        $towns = DB::table('towns')->get();
 
+        foreach ($towns as $town){
+            try{
+                $response = json_decode(file_get_contents('http://api.openweathermap.org/data/2.5/forecast?q='.$town->town.'&mode=json&appid=f84ba1064b0ae65792326548686f361c'), true);
+                // print_r($response);
+                $this->update_weather($response['list'],$town->id);
+            } catch (\Exception $e){
+                //print_r($response);
+            }
+        }
+    }
 }
